@@ -1,6 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, Relation } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+  Relation,
+  AfterInsert,
+  BeforeInsert,
+} from 'typeorm';
 import {Booking} from './booking';
-import {WaitList} from './waitList';
+import {Waitlist} from './waitList';
+import { cache } from '../../cache';
+import { EventTrigger } from '../../enum';
+import { randomUUID } from 'node:crypto';
 
 @Entity()
 export class Event {
@@ -19,12 +32,26 @@ export class Event {
   @OneToMany(() => Booking, (booking) => booking.event)
   bookings!: Relation<Booking[]>
 
-  @OneToMany(() => WaitList, (waitList) => waitList.event)
-  waitLists!: Relation< WaitList[]>
+  @OneToMany(() => Waitlist, (waitlist) => waitlist.event)
+  waitlists!: Relation< Waitlist[]>
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp', default: () => "CURRENT_TIMESTAMP" })
   created_at!: Date
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp', default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
   updated_at!: Date
+
+  @BeforeInsert()
+  generateUUID() {
+    this.id = randomUUID()
+  }
+
+  @AfterInsert()
+  addNewEventToCache(): void {
+    cache.emit(EventTrigger.INIT, {
+      name: this.name,
+      available_tickets: this.available_tickets,
+      wait_list_count: 0
+    })
+  }
 }

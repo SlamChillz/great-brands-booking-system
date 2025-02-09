@@ -1,9 +1,9 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
-import { Event } from "./entity/event"
-import { User } from "./entity/user"
-import { WaitList } from './entity/waitList';
-import { Booking } from './entity/booking';
+import { Event } from './entity'
+import { User } from './entity'
+import { Waitlist } from './entity';
+import { Booking } from './entity';
 import config from '../config'
 
 export const AppDataSource = new DataSource({
@@ -15,7 +15,7 @@ export const AppDataSource = new DataSource({
     database: config.db.DATABASE,
     synchronize: true,
     logging: false,
-    entities: [User, Event, Booking, WaitList],
+    entities: [User, Event, Booking, Waitlist],
     migrations: [],
     subscribers: [],
 })
