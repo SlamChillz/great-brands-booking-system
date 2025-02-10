@@ -6,7 +6,7 @@
     "dev": "ts-node-dev --respawn --clear --transpile-only --ignore-watch node_modules ./src/server.ts",
     "build": "rimraf ./dist && tsc",
     "start": "node dist/server.js",
-    "test": "jest",
+    "test": "jest --coverage",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage"
   },
@@ -38,7 +38,7 @@
   "engines": {
     "node": ">=20.18.2",
     "yarn": ">=1.22.22",
-    "npm": ""
+    "npm": ">=10.8.2"
   },
   "dependencies": {
     "async-mutex": "^0.5.0",
