@@ -1,7 +1,7 @@
 const uniqueStrings = new Set();
 const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-export function randomEventName(length = 10) {
+export function randomEventName(length = 7) {
   let result = '';
 
   for (let i = 0; i < length; i++) {
