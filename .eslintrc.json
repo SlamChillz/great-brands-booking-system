@@ -15,7 +15,7 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "ignorePatterns": ["test/**/*.ts"],
+  "ignorePatterns": ["test/**/*.ts", "dist/**/*.ts"],
   "rules": {
     "prettier/prettier": "error",
     "camelcase": "error",
