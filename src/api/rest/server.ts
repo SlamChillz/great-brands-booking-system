@@ -5,6 +5,7 @@ import { ServerOptions } from '../../types/rest';
 import route from './routes/v1'
 import {ValidationError} from 'joi';
 import httpStatus from 'http-status';
+import rateLimit from 'express-rate-limit';
 
 class RestServer {
   private readonly app: Express
@@ -28,6 +29,20 @@ class RestServer {
     this.router = express.Router()
     this.routes = route[this.version](this.router)
     // this.routes.map(Route => new Route(this.router))
+  }
+
+  private applyRateLimit() {
+    this.app.use(rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      limit: 50,
+      message: {
+        status: 'error',
+        message: 'Too many requests, please try again later.',
+        error: {}
+      },
+      standardHeaders: true,
+      legacyHeaders: false,
+    }))
   }
 
   public get restApp(): Express {
