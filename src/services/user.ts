@@ -18,21 +18,17 @@ export default class UserService {
         data: {user}
       }
     } catch (error: unknown) {
-      if (error instanceof  Error) {
-        if (error.message.includes(dbError.CONFLICT_CODE)) {
-          return {
-            status: 'error',
-            code: httpStatus.CONFLICT,
-            message: httpStatus['409'],
-            error: {
-              username: 'username has been taken',
-            },
-          }
+      if (JSON.stringify(error).includes('23505')) {
+        return {
+          status: 'failed',
+          code: httpStatus.CONFLICT,
+          message: httpStatus['409'],
+          error: {
+            username: 'username has been taken',
+          },
         }
-        logger.error(`Unhandled error encountered while creating user`, error);
-      } else {
-        logger.error('Unknown error encountered while creating user', error);
       }
+      logger.error('Error encountered while creating user', error);
       return {
         status: 'error',
         code: httpStatus.INTERNAL_SERVER_ERROR,

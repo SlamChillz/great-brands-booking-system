@@ -19,14 +19,24 @@ export default class EventService {
 				message: 'Event created',
 				data: { event }
 			};
-		} catch (error) {
+		} catch (error: unknown) {
+      if (JSON.stringify(error).includes('23505')) {
+        return {
+          status: 'failed',
+          code: httpStatus.CONFLICT,
+          message: httpStatus['409'],
+          error: {
+            username: 'event name already exists',
+          },
+        }
+      }
 			logger.error('Error creating event', { error });
-			return {
-				status: 'error',
+      return {
+        status: 'error',
         code: httpStatus.INTERNAL_SERVER_ERROR,
-				message: httpStatus['500'],
-				error: {}
-			};
+        message: httpStatus['500'],
+        error: {},
+      }
 		}
 	}
 
