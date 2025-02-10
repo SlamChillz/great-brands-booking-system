@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --clear --transpile-only --ignore-watch node_modules ./src/server.ts",
     "build": "rimraf ./dist && tsc",
-    "start": "node dist/server.js",
-    "test": "jest --coverage",
+    "start": "node dist/src/server.js",
+    "test": "NODE_ENV=test jest --coverage",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage"
   },
