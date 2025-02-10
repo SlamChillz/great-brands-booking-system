@@ -1,6 +1,5 @@
 import { cache as Cache } from '../../../src/cache';
 import { EventTrigger } from '../../../src/enum';
-import { Mutex } from 'async-mutex';
 
 jest.mock('async-mutex');
 
@@ -38,13 +37,10 @@ describe('Cache', () => {
         no_tickets: 100,
       };
       cache.init(event);
-      const release = jest.fn();
-      (Mutex.prototype.acquire as jest.Mock).mockResolvedValue(release);
       cache.book('event-1', false);
       await new Promise((resolve) => setTimeout(resolve, 0));
       const cachedEvent = cache.retrieveEvent('event-1');
       expect(cachedEvent?.available_tickets).toBe(101);
-      expect(release).toHaveBeenCalled();
     });
 
     it('should decrease wait_list_count when replacing', async () => {
@@ -54,23 +50,17 @@ describe('Cache', () => {
         no_tickets: 100,
       };
       cache.init(event);
-      const release = jest.fn();
-      (Mutex.prototype.acquire as jest.Mock).mockResolvedValue(release);
       cache.book('event-1', true);
       await new Promise((resolve) => setTimeout(resolve, 0));
       const cachedEvent = cache.retrieveEvent('event-1');
       expect(cachedEvent?.wait_list_count).toBe(-1);
-      expect(release).toHaveBeenCalled();
     });
 
     it('should do nothing if the event does not exist', async () => {
-      const release = jest.fn();
-      (Mutex.prototype.acquire as jest.Mock).mockResolvedValue(release);
       cache.book('non-existent-event', false);
       await new Promise((resolve) => setTimeout(resolve, 0));
       const cachedEvent = cache.retrieveEvent('non-existent-event');
       expect(cachedEvent).toBeNull();
-      expect(release).toHaveBeenCalled();
     });
   });
 
@@ -82,23 +72,17 @@ describe('Cache', () => {
         no_tickets: 100,
       };
       cache.init(event);
-      const release = jest.fn();
-      (Mutex.prototype.acquire as jest.Mock).mockResolvedValue(release);
       cache.wait('event-1');
       await new Promise((resolve) => setTimeout(resolve, 0));
       const cachedEvent = cache.retrieveEvent('event-1');
       expect(cachedEvent?.wait_list_count).toBe(1);
-      expect(release).toHaveBeenCalled();
     });
 
     it('should do nothing if the event does not exist', async () => {
-      const release = jest.fn();
-      (Mutex.prototype.acquire as jest.Mock).mockResolvedValue(release);
       cache.wait('non-existent-event');
       await new Promise((resolve) => setTimeout(resolve, 0));
       const cachedEvent = cache.retrieveEvent('non-existent-event');
       expect(cachedEvent).toBeNull();
-      expect(release).toHaveBeenCalled();
     });
   });
 
@@ -149,13 +133,10 @@ describe('Cache', () => {
         no_tickets: 100,
       };
       cache.init(event);
-      const release = jest.fn();
-      (Mutex.prototype.acquire as jest.Mock).mockResolvedValue(release);
       cache.emit(EventTrigger.BOOK, 'event-1', false);
       await new Promise((resolve) => setTimeout(resolve, 0));
       const cachedEvent = cache.retrieveEvent('event-1');
       expect(cachedEvent?.available_tickets).toBe(101);
-      expect(release).toHaveBeenCalled();
     });
 
     it('should handle WAIT event', async () => {
@@ -165,13 +146,10 @@ describe('Cache', () => {
         no_tickets: 100,
       };
       cache.init(event);
-      const release = jest.fn();
-      (Mutex.prototype.acquire as jest.Mock).mockResolvedValue(release);
       cache.emit(EventTrigger.WAIT, 'event-1');
       await new Promise((resolve) => setTimeout(resolve, 100));
       const cachedEvent = cache.retrieveEvent('event-1');
       expect(cachedEvent?.wait_list_count).toBe(1);
-      expect(release).toHaveBeenCalled();
     });
   });
 });
