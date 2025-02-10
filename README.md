@@ -47,6 +47,9 @@ The application can be run on both host machine and in a containerised environme
 - Basic Authentication
   - `Authorization: Basic base64(username:password)`
 
+## Rate Limit
+- 50requests/15minutes
+
 ## Implementation Description
 - An authenticated user can create an event
 - An authenticated user can book multiple tickets for an event (to ease testing the main functionality)
