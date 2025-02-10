@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, Relation, AfterInsert, AfterRemove } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, Relation, AfterInsert } from "typeorm"
 import {Event} from './event';
 import {User} from './user';
 import { cache } from '../../cache';

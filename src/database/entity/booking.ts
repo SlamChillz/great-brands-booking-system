@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, Relation, AfterInsert, AfterUpdate, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, Relation, AfterInsert, BeforeInsert } from 'typeorm';
 import {BookingStatus} from '../../enum';
 import { User } from './user'
 import { Event } from './event'
